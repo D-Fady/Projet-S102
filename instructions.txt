@@ -1,0 +1,289 @@
+PARTIE 1
+
+**Afficher un fond**
+
+Pour ce projet, un projet Codeblocks vous est fourni : il contient tous les fichiers nécessaires à la compilation et à l'exécution de votre jeu. Ce projet est fait pour les plateformes Windows, n'essayez pas de l'ouvrir sur un autre OS, ça ne fonctionnera pas et l'équipe enseignante ne pourra pas vous aider.
+
+0. Copiez les fichiers du projet dans votre dossier personnel, ouvrez le fichier s102.cbp dans Codeblocks. Vérifiez que le projet compile sans erreur.
+
+
+1. Prenez connaissance des deux classes fournies : le fichier `include/Moteur.h` et le fichier `include/Image.h`. Ces fichiers vous donnent la liste des méthodes ainsi qu'une documentation sommaire sous forme de commentaires. Vous n'avez pas besoin de lire les fichiers sources `src/Moteur.cpp` et `src/Image.cpp` (vous pouvez par curiosité mais ne perdez pas de temps dessus).
+
+
+
+Point technique : Comme présenté en amphi, notre moteur utilise la bibliothèque SDL. Il s'agit d'une bibliothèque C relativement bas niveau qui réalise les opérations basiques permettant de programmer un jeu vidéo : gestion de la fenêtre, chargement des images, affichage des images, gestion des entrées clavier/souris/manette/etc. Pour des raisons de simplicité, nous vous fournissons une interface simplifiée et dans un style plus C++ que la SDL via les classes Moteur et Image. Ces classes ne contiennent qu'un sous-ensemble de fonctions relativement simples appelant la SDL en interne.
+
+Deux rappels importants :
+
+* Ne modifiez jamais les fichiers `Moteur.h`, `Image.h`, `Moteur.cpp`, `Image.cpp` : les fichiers d'origine seront utilisés pour corriger vos projets, si votre projet ne fonctionne qu'avec des versions modifiées du moteur, nous ne pourrons pas le lancer.
+
+
+* N'appelez jamais des fonctions de la bibliothèque SDL directement : l'interface fournie contient toutes les fonctions dont vous aurez besoin.
+
+
+
+2. Prenez connaissance du fichier `src/main.cpp` qui contient notre fonction main. Compilez et lancez le programme. Que se passe-t-il ? Que fait ce programme, pour l'instant ? Remarque : quand on programme un jeu vidéo, il faut tout gérer, même le fait de fermer le jeu lorsque l'on clique sur le bouton croix de la fenêtre. Dans ce cas, c'est déjà fait dans le code fourni (via l'événement `QUITTER_APPUYE`). Vous pouvez faire le test : si vous retirez ce morceau de code, vous ne pourrez plus fermer la fenêtre, et vous devrez « tuer » le programme avec le bouton STOP de Codeblocks.
+
+
+3. Commencez par afficher un fond à votre niveau. Chargez l'image `assets/fond.png` et dessinez-la aux coordonnées (0,0) dans la boucle du jeu avec la fonction `void dessiner(int x, int y)` (ne vous préoccupez pas de la variante avec 6 paramètres pour l'instant). Compilez et vérifier que votre fond s'affiche bien : il s'agit d'un fond vert avec de l'herbe en pixel-art avec un léger quadrillage par-dessus.
+
+
+
+Note : si le fichier n'existe pas, une exception de type `runtime_error` est levée. Pour pouvoir traiter cette exception tout en conservant votre objet, vous devez d'abord instancier un objet Image par défaut, puis utiliser le constructeur avec le nom de fichier :
+
+```cpp
+Image image;
+try {
+    image = Image(moteur, "nomDeFichier.png");
+}
+// (... et le catch pour traiter l'exception)
+
+```
+
+
+
+**Ouvrir un coffre**
+
+4. Ajoutez maintenant un objet. Chargez l'image `assets/coffre_ferme.png` et affichez-la aux coordonnées (0,0) dans la boucle du jeu.  Où voyez-vous le coffre ? Essayez de modifier ces coordonnées pour voir où le coffre apparaît. Lorsque je demande au moteur d'afficher le coffre aux coordonnées (X,Y), quelle partie du coffre arrive sur les coordonnées (X,Y) ?  Le milieu de l'image ? Un coin ? Lequel ? Note : lorsque vous dessinez des objets à l'écran, les objets sont affichés dans l'ordre du code. Si vous essayez d'afficher deux objets qui se chevauchent, c'est l'objet qui appelle dessiner en dernier qui sera affiché au-dessus. Faites attention à bien appeler dessiner pour le fond avant le coffre.
+
+
+5. Chargez l'image `assets/coffre_ouvert.png`. Faites en sorte que lorsque l'on appuie sur la barre d'espace (événement `ESPACE_APPUYE`) l'image du coffre fermé soit remplacée à l'écran par celle du coffre ouvert. Indice : vous pouvez utiliser un booléen pour retenir l'état du coffre, modifier ce booléen dans la boucle d'événements, et choisir ensuite quelle image afficher selon la valeur du booléen.
+
+
+6. Modifiez le comportement : maintenant, on veut que le coffre s'ouvre lorsqu'on appuie sur la barre d'espace, et qu'il se referme lorsqu'on relâche la barre d'espace. Vous pouvez utiliser `ESPACE_RELACHE`.
+
+
+
+**Pour aller plus loin (Optionnel)**
+
+7. (Optionnel) Ajoutez le code nécessaire pour que le coffre « tombe » : à chaque affichage, il faut bouger le coffre d'un pixel vers le bas.
+
+
+8. (Optionnel) Lorsque votre coffre bouge bien vers le bas, faites en sorte que le coffre « réapparaisse » en haut de la fenêtre quand il sort de la fenêtre.
+
+
+9. (Optionnel) Modifiez maintenant le code pour que le coffre ne quitte jamais la fenêtre : lorsqu'il atteint le bas, il doit maintenant « rebondir » et donc aller vers le haut.
+
+
+10. (Optionnel) Généralisez ce processus en faisant en sorte que le coffre bouge en diagonal et qu'il rebondisse sur chacun des quatre bords de l'écran.
+
+
+11. (Optionnel) Sans dupliquer l'image, faites en sorte que plusieurs coffres s'affichent et bougent indépendamment.
+
+
+12. (Optionnel) Faites en sorte qu'un appui sur la barre d'espace permette maintenant d'ajouter un nouveau coffre à l'affichage. Il faut pouvoir gérer une liste de taille variable de coordonnées (x, y) et de directions (dx, dy), sans doute à l'aide de la classe vector.
+
+
+PARTIE 2
+
+**Afficher des personnages**
+
+À la séance précédente, nous avons affiché des images, utilisé des événements, et modifié l'état d'un objet de jeu (le coffre). Nous allons maintenant voir comment créer une classe pour gérer des objets complexes (avec une position, un état, etc.) de manière efficace.
+
+1. Créez un nouveau fichier `include/Personnage.h` et un autre fichier `src/Personnage.cpp`.  Ajoutez les directives habituelles `#ifndef` / `#define` / `#endif` dans votre fichier. Écrivez une classe `Personnage`. Un personnage est défini par une `Image` et deux coordonnées entières, initialisables par le constructeur.
+
+
+2. Supprimez le coffre (vous pouvez commenter les lignes que vous avez écrites). Chargez l'image `assets/personnage_simple.png` et instanciez un objet `Personnage` dans votre main aux coordonnées (0,0) : ce sera le personnage que vous contrôlerez pendant le jeu (ex: `Personnage chevalier;`). Ajoutez une méthode `dessiner` à votre classe `Personnage` : cette fonction ne prend aucun paramètre et utilise les attributs de la classe pour dessiner le personnage au bon endroit. Appelez cette méthode dans la boucle de jeu, et vérifiez que votre personnage s'affiche correctement.
+
+
+
+**Animations**
+
+Point technique : dans un jeu, on va rarement déplacer une image fixe pour animer un personnage. Les animations sont décomposées en des images plus ou moins nombreuses pour prendre en compte les orientations possibles et les différentes étapes. On utilise une feuille de sprites (sprite sheet). Au lieu d'afficher l'ensemble de l'image, on va sélectionner, à chaque affichage, une partie de l'image qu'on souhaite afficher.
+
+3. Ouvrez le fichier `assets/personnages.png`. Il s'agit d'une feuille de sprites. Remarquez que plusieurs personnages sont dessinés dans différentes positions, mais que pour chaque personnage, les positions sont dans le même ordre. Numérotons les colonnes et les lignes de cette image en partant de 0. Les cases font 16 pixels de large.
+
+
+4. Au lieu de charger `assets/personnage_simple.png`, chargez `assets/personnages.png`. Modifiez la méthode `Personnage::dessiner()` pour ne dessiner que le sprite voulu : pour cela, vous devez appeler la variante de `Image::dessiner` qui prend 6 paramètres. Les 2 premiers paramètres sont toujours les coordonnées à l'écran, les 4 autres permettent de sélectionner le rectangle voulu. Le rectangle qu'on veut sélectionner est à l'index (4,0) et ne fait qu'une case de largeur et de hauteur (pensez à bien multiplier ces 4 paramètres par la taille des cases). Compilez et vérifiez que votre affichage est correct (personnage sur sa case qui regarde vers le bas).
+
+
+5. On veut pouvoir tourner notre personnage dans une certaine direction : il peut regarder à droite, à gauche, en haut ou en bas.  Identifiez les index des sprites que vous devez afficher. Indice : ils sont tous sur la colonne 4.
+
+
+6. Ajoutez à votre classe `Personnage` un attribut pour retenir la direction courante. Pensez à ajouter un paramètre à votre constructeur pour pouvoir initialiser cette direction. Ajoutez des méthodes `regarderDroite`, `regarderGauche`, `regarderHaut` et `regarderBas` qui mettent à jour la direction. Note : pour retenir la direction, il peut être pertinent de créer une `enum Direction { GAUCHE, DROITE, HAUT, BAS }`.
+
+
+7. Modifiez votre méthode `Personnage::dessiner` pour sélectionner le bon rectangle correspondant à la direction courante dans la feuille de sprites.
+
+
+8. En utilisant les événements `GAUCHE_APPUYE`, `DROITE_APPUYE`, etc., faites en sorte que l'on puisse appeler les différentes fonctions `regarderDroite`, etc.
+
+
+
+**Skins**
+
+9. On veut pouvoir créer un autre type de personnage, et donc utiliser un autre skin (la « peau »).
+
+
+10. Ajoutez deux attributs `skin_x` et `skin_y` qui correspondent à la position de votre skin.  Ajoutez également les paramètres correspondants dans votre constructeur. Mettez à jour votre méthode `Personnage::dessiner` pour que la sélection du rectangle à dessiner soit faite relativement à `skin_x` et `skin_y`.
+
+
+11. Modifiez le code dans `main` pour prendre en compte les nouveaux paramètres de votre constructeur (ex: `skin_x=3` et `skin_y=0` pour le chevalier).
+
+
+12. Instanciez deux autres personnages, `ennemi1` et `ennemi2`, et donnez-leur des skins adaptés. Initialisez l'un à (5*TAILLE_CASE, TAILLE_CASE) et l'autre à (TAILLE_CASE, 5*TAILLE_CASE). Ajoutez leurs fonctions d'affichage dans la boucle du jeu.
+
+
+
+**Avatar & ennemis**
+
+13. Créez deux classes `Avatar` et `Ennemi`.  Chacune doit avoir :
+
+
+
+* un attribut `Personnage perso`;
+
+
+* un constructeur qui initialise `perso`;
+
+
+* une méthode `dessiner` qui appelle `perso.dessiner()`.
+
+
+
+14. Modifiez votre `main` pour que `chevalier` soit de type `Avatar`, et `ennemi1`/`ennemi2` de type `Ennemi`.
+
+
+15. Dans le `main`, supprimez les appels à `regarderDroite`, etc. (ces méthodes appartiennent à `Personnage`).
+
+
+
+**L'avatar : déplacé par les flèches**
+
+16. Ajoutez une méthode générale `deplacer(int dx, int dy)` à la classe `Personnage`.
+
+
+17. Rappel : origine en haut à gauche.
+
+
+18. Dans la classe `Avatar`, implémentez des méthodes `allerDroite`, `allerGauche`, `allerHaut` et `allerBas` : ces méthodes doivent tourner le personnage et le déplacer d'une case. Rappel : la grille fait 16 pixels.
+
+
+19. Connectez ces méthodes aux événements clavier. Vérifiez que le personnage reste aligné sur la grille.
+
+
+20. Écrivez une fonction `peutBougerVers` dans la classe `Personnage`.  Cette fonction prend en paramètre une direction et renvoie un booléen (true si le personnage a le droit de bouger, false si le bord est atteint). Modifiez vos fonctions `allerGauche` et `allerHaut` pour n'appeler `deplacer` que si le bord n'est pas atteint.
+
+
+21. Ajoutez les directions « droite » et « bas » dans `peutBougerVers`. Modifiez `allerDroite` et `allerBas` en conséquence.
+
+
+
+**Les ennemis : déplacés par le programme**
+
+22. Modifiez les appels aux constructeurs des deux ennemis pour initialiser les bonnes directions (ennemi 1 : haut/bas, ennemi 2 : droite/gauche).
+
+
+23. Ajoutez une méthode `avancer` à la classe `Ennemi`. Si un ennemi atteint le bord (utilisez `peutBougerVers`), alors on inverse sa direction. Vous aurez besoin de `Personnage::getDirection()` et `Personnage::inverserDirection()`. Dans la boucle de jeu, appelez cette méthode pour vos deux ennemis.
+
+
+24. Pour limiter la vitesse, utilisez la méthode `animationsAmettreAjour` du moteur qui renvoie true N fois par seconde. Ajoutez une condition pour que les ennemis ne bougent que lorsque `animationsAmettreAjour` renvoie true.
+
+
+25. Ajoutez une méthode `touche` à votre classe `Avatar` qui prend un objet de type `Ennemi` en paramètre et teste si l'avatar touche l'ennemi. Si c'est le cas, mettez le booléen `quitter` à true.
+
+
+
+**Pour aller plus loin (Optionnel)**
+
+26. (Optionnel) Ajoutez une petite pause avant de quitter lorsqu'on touche un ennemi (utilisez la méthode `attendre` du moteur).
+
+
+27. (Optionnel) Ajoutez des animations de marche. Au lieu d'une image fixe, alternez entre quatre images pour chaque direction. Utilisez le modulo (%) pour boucler 0, 1, 2, 3.
+
+
+28. (Optionnel) Ajoutez de l'aléatoire pour le déplacement des ennemis avec `rand() % 4`.
+
+
+
+PATIE 3
+
+Cette nouvelle partie va consister à programmer de la lecture dans des fichiers ainsi qu'un algorithme de recherche.
+
+**Dictionnaire de sprites**
+
+1. Regardez l'image `assets/objets.png` (tile set). Chargez cette image dans votre code. Un fichier `assets/dictionnaire.txt` est fourni. Le nombre sur la première ligne donne le nombre d'éléments. Chaque ligne suivante est formée ainsi : `nom x y propriété`. Ce fichier est trié par ordre alphabétique.
+
+
+2. Écrivez une classe `Tuile` pour stocker les informations d'une ligne du fichier (nom, x, y, propriété). Utilisez un constructeur qui initialise ces 4 attributs.
+
+
+3. Ajoutez une fonction `afficher` qui affiche les attributs de cet objet.
+
+
+4. Écrivez une classe `Dictionnaire` qui contient un vecteur d'objets `Tuile`. Ajoutez un constructeur qui prend en paramètre un nom de fichier, lit le fichier et remplit le vecteur.
+
+
+5. Ajoutez à `Dictionnaire` une méthode `afficher` qui appelle la méthode afficher de chaque tuile.
+
+
+6. Dans votre main, chargez les définitions : `Dictionnaire dictionnaire("assets/dictionnaire.txt");`.
+
+
+7. Ajoutez à la classe `Dictionnaire` une méthode `recherche` qui prend le nom d'une tuile en paramètre. La méthode renvoie un booléen (true si trouvé) et l'objet `Tuile` trouvé est renvoyé par un paramètre résultat (R). Le dictionnaire étant trié, pensez à utiliser une méthode de recherche efficace.
+
+
+8. Quel est le nom de l'algorithme de recherche que vous avez utilisé ?
+
+
+
+**Lecture de niveaux**
+
+9. Créez une classe `Objet` avec pour attributs : une image, deux coordonnées (dans le niveau) et la `Tuile` utilisée.
+
+
+10. Ajoutez un constructeur qui prend en paramètre une image, le nom de l'objet, un `Dictionnaire` et deux coordonnées. Ce constructeur doit initialiser l'attribut tuile en recherchant le nom dans le dictionnaire.
+
+
+11. Ajoutez une méthode `Objet::dessiner`.
+
+
+12. Créez une classe `Niveau` avec comme attribut un vecteur contenant des `Objet`. Le constructeur lit le fichier `assets/niveau.txt` et remplit le vecteur.
+
+
+13. Ajoutez une méthode `dessiner` à votre classe `Niveau` qui appelle `dessiner` pour chaque objet.
+
+
+14. Dans votre main, chargez `assets/niveau.txt`. Ajoutez l'affichage du niveau avant l'affichage des personnages.
+
+
+
+**Tests de collision**
+
+15. Ajoutez à `Niveau` une méthode `caseEstLibre(x, y)`. Cette fonction doit parcourir le vecteur et tester si la propriété de l'objet est « solide » et si les coordonnées correspondent. Si c'est le cas, renvoyer false.
+
+
+16. Mettez à jour `Personnage::peutBougerVers` pour vérifier si la case visée est libre (ajoutez un paramètre de type `Niveau`).
+
+
+
+**Interaction avec des objets**
+
+17. Ajoutez à votre `Niveau` un attribut entier pour compter le nombre de bonus. Incrémentez cet attribut lors du chargement pour chaque objet ayant la propriété « bonus ».
+
+
+18. Ajoutez une méthode `Tuile::setPropriete`.
+
+
+19. Ajoutez au `Niveau` une méthode `testerBonusEtPrendre(x, y)`. Si un objet à ces coordonnées a la propriété « bonus », décrémentez le compteur de bonus et remplacez la propriété par « cache ».
+
+
+20. (Optionnel) Factorisez le code en créant une sous-fonction `indiceObjet`.
+
+
+21. Modifiez la méthode `dessiner` du `Niveau` pour ne pas dessiner les objets dont la propriété est « cache ».
+
+
+22. Lorsque l'avatar vient de bouger, appelez `testerBonusEtPrendre`.
+
+
+
+**Fin du jeu**
+
+24. Ajoutez une méthode `gagne` au `Niveau` qui renvoie true si le nombre de bonus est égal à 0.
+
+
+25. Appelez cette fonction pour tester la victoire et arrêtez le jeu si c'est gagné.
+
+
+26. (Optionnel) Ajoutez une pause et affichez `assets/gameover.png` ou `assets/bravo.png` selon le résultat.

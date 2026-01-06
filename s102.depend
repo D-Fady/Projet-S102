@@ -1,0 +1,15 @@
+# depslib dependency file v1.0
+1764152111 source:z:\c++\s102\src\image.cpp
+	<SDL_image.h>
+	<exception>
+	"Image.h"
+
+1764156780 source:z:\c++\s102\src\main.cpp
+	<vector>
+	"Moteur.h"
+	"Image.h"
+
+1764152111 source:z:\c++\s102\src\moteur.cpp
+	<SDL_image.h>
+	"Moteur.h"
+
