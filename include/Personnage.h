@@ -24,26 +24,20 @@ public:
 
   void display(int l, int h) const;
 
-  // Question 6-8: Regarder dans une direction
   void regarderDroite();
   void regarderGauche();
   void regarderHaut();
   void regarderBas();
 
-  // Question 16: Deplacer le personnage
   void deplacer(int dx, int dy);
 
-  // Question 20-21: Verifier si le personnage peut bouger (bords de l'ecran)
   bool peutBougerVers(Direction dir) const;
 
-  // Question 20-21 Part 3 (Q16): Verifier avec collision niveau
   bool peutBougerVers(Direction dir, const Niveau &niveau) const;
 
-  // Question 23: Getters et inversion de direction pour les ennemis
   Direction getDirection() const;
   void inverserDirection();
 
-  // Getters pour les coordonnees (collision)
   int getX() const;
   int getY() const;
 };

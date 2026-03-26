@@ -1,10 +1,10 @@
-mak #include "Avatar.h"
+#include "Avatar.h"
 #include "Ennemie.h"
 #include "Niveau.h"
 #include "Personnage.h"
 #include <iostream>
 
-    using namespace std;
+using namespace std;
 
 Avatar::Avatar(const Image &img, int x, int y, int dir, int skin_x,
                int skin_y) {
@@ -14,7 +14,6 @@ Avatar::Avatar(const Image &img, int x, int y, int dir, int skin_x,
 
 void Avatar::display(int l, int h) const { _perso.display(l, h); }
 
-// Question 18-19: Aller a droite (tourner + bouger si possible)
 void Avatar::allerDroite() {
   _perso.regarderDroite();
   if (_perso.peutBougerVers(DROITE)) {
@@ -43,7 +42,6 @@ void Avatar::allerBas() {
   }
 }
 
-// Question 18-21 avec collision niveau (Part 3 Q16)
 void Avatar::allerDroite(const Niveau &niveau) {
   _perso.regarderDroite();
   if (_perso.peutBougerVers(DROITE, niveau)) {
@@ -72,13 +70,12 @@ void Avatar::allerBas(const Niveau &niveau) {
   }
 }
 
-// Question 25: Tester collision avec un ennemi
 bool Avatar::touche(const Ennemie &ennemi) const {
-  // Collision si meme position
+  // collision si meme position
   return (_perso.getX() == ennemi.getX() && _perso.getY() == ennemi.getY());
 }
 
-// Getters
+// getter
 int Avatar::getX() const { return _perso.getX(); }
 
 int Avatar::getY() const { return _perso.getY(); }

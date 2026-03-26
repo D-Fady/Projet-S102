@@ -6,7 +6,6 @@
 
 using namespace std;
 
-// Constructeur par defaut (necessaire pour les attributs de classe)
 Personnage::Personnage() {
   _x = 0;
   _y = 0;
@@ -15,11 +14,10 @@ Personnage::Personnage() {
   _skin_y = 0;
 }
 
-// Constructeur avec parametres (Q10-11: avec skin_x et skin_y)
 Personnage::Personnage(const Image &img, int x, int y, int dir, int skin_x,
                        int skin_y) {
   _img = img;
-  _x = x * TAILLE_CASE; // Convertir en pixels
+  _x = x * TAILLE_CASE; // converti en pixels
   _y = y * TAILLE_CASE;
   _direction = dir;
   _skin_x = skin_x;
@@ -31,7 +29,6 @@ void Personnage::display(int l, int h) const {
                 h * 16);
 }
 
-// Question 6-8: Methodes pour changer la direction
 void Personnage::regarderDroite() { _direction = DROITE; }
 
 void Personnage::regarderGauche() { _direction = GAUCHE; }
@@ -40,13 +37,11 @@ void Personnage::regarderHaut() { _direction = HAUT; }
 
 void Personnage::regarderBas() { _direction = BAS; }
 
-// Question 16: Deplacer le personnage
 void Personnage::deplacer(int dx, int dy) {
   _x += dx;
   _y += dy;
 }
 
-// Question 20-21: Verifier si on peut bouger (bords de l'ecran seulement)
 bool Personnage::peutBougerVers(Direction dir) const {
   switch (dir) {
   case GAUCHE:
@@ -62,15 +57,13 @@ bool Personnage::peutBougerVers(Direction dir) const {
   }
 }
 
-// Question 16 Part 3: Verifier avec collision niveau (sera complete dans Part
-// 3)
 bool Personnage::peutBougerVers(Direction dir, const Niveau &niveau) const {
-  // D'abord verifier les bords de l'ecran
+  // verifie les bords de l'ecran
   if (!peutBougerVers(dir)) {
     return false;
   }
 
-  // Calculer la case de destination
+  // calcule la case de destination
   int nextX = _x / TAILLE_CASE;
   int nextY = _y / TAILLE_CASE;
 
@@ -89,16 +82,14 @@ bool Personnage::peutBougerVers(Direction dir, const Niveau &niveau) const {
     break;
   }
 
-  // Verifier si la case est libre dans le niveau
+  // verifie si la case est libre dans le niveau
   return niveau.caseEstLibre(nextX, nextY);
 }
 
-// Question 23: Obtenir la direction actuelle
 Direction Personnage::getDirection() const {
   return static_cast<Direction>(_direction);
 }
 
-// Question 23: Inverser la direction (pour les ennemis)
 void Personnage::inverserDirection() {
   switch (_direction) {
   case GAUCHE:
@@ -116,7 +107,7 @@ void Personnage::inverserDirection() {
   }
 }
 
-// Getters pour les coordonnees (pour la collision)
+// getter pour les coordonnees pour la collision
 int Personnage::getX() const { return _x; }
 
 int Personnage::getY() const { return _y; }

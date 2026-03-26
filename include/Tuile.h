@@ -4,7 +4,6 @@
 
 using namespace std;
 
-// Part 3, Questions 2-3: Classe Tuile pour stocker les infos du dictionnaire
 class Tuile {
 private:
   string _nom;
@@ -13,19 +12,16 @@ private:
   string _propriete;
 
 public:
-  // Constructeur par defaut
   Tuile();
 
-  // Constructeur avec parametres (Q2)
   Tuile(const string &nom, int x, int y, const string &propriete);
 
-  // Q3: Afficher les attributs
+  // afichee les attribut
   void afficher() const;
 
-  // Q18: Modifier la propriete
   void setPropriete(const string &p);
 
-  // Getters
+  // getter
   string getNom() const;
   int getX() const;
   int getY() const;

@@ -1,41 +1,67 @@
-#include "Objet.h"
-#include "Moteur.h"
-#include <iostream>
-
-using namespace std;
-
-Objet::Objet() {
-  _x = 0;
-  _y = 0;
-}
-
-Objet::Objet(const Image &img, const string &nom, Dictionnaire &dict, int x,
-             int y) {
-  _img = img;
-  _x = x;
-  _y = y;
-
-  // rechercher la tuile dans le dictionnaire
-  Tuile tuile;
-  if (dict.recherche(nom, tuile)) {
-    _tuile = tuile;
-  } else {
-    cerr << "Erreur: tuile '" << nom << "' non trouvee dans le dictionnaire"
-         << endl;
-  }
-}
-
-void Objet::dessiner() const {
-  _img.dessiner(_x * TAILLE_CASE, _y * TAILLE_CASE, _tuile.getX() * TAILLE_CASE,
-                _tuile.getY() * TAILLE_CASE, TAILLE_CASE, TAILLE_CASE);
-}
-
-// getters
-int Objet::getX() const { return _x; }
-
-int Objet::getY() const { return _y; }
-
-string Objet::getPropriete() const { return _tuile.getPropriete(); }
-
-// Q18-19 modifie la propriete
-void Objet::setPropriete(const string &p) { _tuile.setPropriete(p); }
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Test SDL" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/s102" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/s102" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+			<Add option="-Iinclude" />
+			<Add option="-ISDL2/include/SDL2" />
+		</Compiler>
+		<Linker>
+			<Add option="-lmingw32" />
+			<Add option="-LSDL2/lib" />
+			<Add option="-lSDL2main" />
+			<Add option="-lSDL2" />
+			<Add option="-lSDL2_image" />
+		</Linker>
+		<Unit filename="include/Avatar.h" />
+		<Unit filename="include/Dictionnaire.h" />
+		<Unit filename="include/Ennemie.h" />
+		<Unit filename="include/Image.h" />
+		<Unit filename="include/Moteur.h" />
+		<Unit filename="include/Niveau.h" />
+		<Unit filename="include/Objet.h" />
+		<Unit filename="include/Personnage.h" />
+		<Unit filename="include/Tuile.h" />
+		<Unit filename="src/Avatar.cpp" />
+		<Unit filename="src/Dictionnaire.cpp" />
+		<Unit filename="src/Ennemie.cpp" />
+		<Unit filename="src/Image.cpp" />
+		<Unit filename="src/Moteur.cpp" />
+		<Unit filename="src/Niveau.cpp" />
+		<Unit filename="src/Objet.cpp" />
+		<Unit filename="src/Personnage.cpp" />
+		<Unit filename="src/Tuile.cpp" />
+		<Unit filename="src/main.cpp" />
+		<Extensions>
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
